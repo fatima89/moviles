@@ -13,12 +13,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,11 +31,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.prueba.ui.theme.Person
+import kotlinx.coroutines.delay
 
 @Composable
 fun ListPerson(){
-   //super.onCreate(savedInstanceState)
+   //Corrutines
+    //sleep(10s)
+    //
+    var timeLeft by remember{
+        mutableStateOf(10)
+    }
+    var isPaused by remember{
+        mutableStateOf(false)
+    }
+    LaunchedEffect(key1 = timeLeft) {
+        while(timeLeft>0){
+            delay(1000L)
+            timeLeft --
+        }
+    }
+
     var name by remember {
         mutableStateOf("")
     }
@@ -46,6 +66,38 @@ fun ListPerson(){
     val context= LocalContext.current
     Column(
         modifier = Modifier.fillMaxSize()) {
+        Row (verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)) {
+        Text(
+            text = "Time Left: ${timeLeft.toString()}",
+            modifier = Modifier.padding(16.dp),
+            fontSize = 20.sp
+        )
+        Spacer(
+            modifier = Modifier.weight(1f)
+        )
+        Button(onClick = { timeLeft = 10 }) {
+            Icon(
+                imageVector = Icons.Default.Refresh,
+                contentDescription = "Icono de agregar",
+                modifier = Modifier
+                    .size(20.dp)
+            )
+        }
+            Spacer(
+                modifier = Modifier.weight(1f)
+            )
+            Button(onClick = { isPaused = true }) {
+                Icon(
+                    imageVector = Icons.Default.Warning,
+                    contentDescription = "Icono de agregar",
+                    modifier = Modifier
+                        .size(20.dp)
+                )
+            }
+    }
         Row (verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
